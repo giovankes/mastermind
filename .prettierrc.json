@@ -1,0 +1,22 @@
+{
+  "printWidth": 80,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "arrowParens": "always",
+  "bracketSpacing": true,
+  "insertPragma": false,
+  "printWidth": 90,
+  "proseWrap": "preserve",
+  "requirePragma": false,
+  "semi": true,
+  "tabWidth": 2,
+  "useTabs": false,
+  "overrides": [
+    {
+      "files": "*.scss",
+      "options": {
+        "singleQuote": false
+      }
+    }
+  ]
+}
