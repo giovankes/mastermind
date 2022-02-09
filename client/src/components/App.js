@@ -171,11 +171,9 @@ const HintsRow = React.createClass({
     let hintClass = '';
     let exactMatches = this.props.state.exactMatches;
     let valueMatches = this.props.state.valueMatches;
-
     let generateHint = (i) => {
       hintClass = 'hint';
       idVal = this.props.name + '-' + i + 1;
-
       //update current row
       if (this.props.state.currentRow - 1 === this.props.rowId) {
         if (exactMatches > 0) {
@@ -369,7 +367,6 @@ const App = React.createClass({
     let foundKey;
     let exactMatches = 0;
     let valueMatches = 0;
-
     // First pass: Look for value & position matches
     // Safely remove items if they match
     for (let [key, value] of pegs) {
