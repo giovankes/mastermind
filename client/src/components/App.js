@@ -1,6 +1,5 @@
 import React from 'react';
 import classNames from 'classnames';
-
 let times = (n) => {
   return (f) => {
     Array(n)
@@ -290,6 +289,7 @@ const App = React.createClass({
     return {
       code: this.getCode(), //the main code to be decoded
       selectedPeg: this.props.colors.get(0),
+      type: false,
       currentRow: 0,
       currentGuess: new Map(),
       exactMatches: 0,
@@ -297,6 +297,7 @@ const App = React.createClass({
       pegsInRow: 4,
       attempts: 10,
       rules: false,
+      human: false,
       success: false,
       endGame: false,
     };
@@ -317,6 +318,7 @@ const App = React.createClass({
     this.setState({ rules: !this.state.rules });
   },
 
+  //NOTE: create random code
   getRandomArbitrary: function (min = 0, max = 5) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   },
@@ -324,6 +326,7 @@ const App = React.createClass({
   getCode: function () {
     const code = new Map();
 
+    //NOTE: code gets saved here
     let generateCode = (i) => {
       code.set(i, this.props.colors.get(this.getRandomArbitrary()));
     };
@@ -402,38 +405,48 @@ const App = React.createClass({
   },
 
   render: function () {
+    console.log(this.state);
     return (
       <div>
-        <h1>
-          <span className="M">D</span>
-          <span className="A">E</span>
-          <span className="S">E</span>
-          <span className="T">Z</span>
-          <span className="E">N</span>
-          <span className="R">U</span>
-          <span className="MIND">TS</span>
-        </h1>
-        <Rules rules={this.state.rules} toggleRules={this.toggleRules} />
+        {!this.state.type ? (
+          <div>
+            <button onClick={() => this.setState({ type: 'human' })}>Mens</button>
+            <button onClick={() => this.setState({ type: 'AI' })}> AI</button>
+          </div>
+        ) : (
+          <div>
+            <h1>
+              <span className="M">D</span>
+              <span className="A">E</span>
+              <span className="S">E</span>
+              <span className="T">Z</span>
+              <span className="E">N</span>
+              <span className="R">U</span>
+              <span className="MIND">TS</span>
+            </h1>
 
-        <div className="clearfix">
-          <DecodingBoard
-            state={this.state}
-            activatePeg={this.activatePeg}
-            submitPegs={this.submitPegs}
-          />
-          <CodePegs
-            selectedPeg={this.state.selectedPeg}
-            colors={this.props.colors}
-            activatePeg={this.activatePeg}
-          />
-        </div>
+            <Rules rules={this.state.rules} toggleRules={this.toggleRules} />
 
-        <EndGame
-          endGame={this.state.endGame}
-          success={this.state.success}
-          reloadGame={this.reloadGame}
-        />
-        <div className="cheat">{this.state.code}</div>
+            <div className="clearfix">
+              <DecodingBoard
+                state={this.state}
+                activatePeg={this.activatePeg}
+                submitPegs={this.submitPegs}
+              />
+              <CodePegs
+                selectedPeg={this.state.selectedPeg}
+                colors={this.props.colors}
+                activatePeg={this.activatePeg}
+              />
+            </div>
+            <EndGame
+              endGame={this.state.endGame}
+              success={this.state.success}
+              reloadGame={this.reloadGame}
+            />
+            <div className="cheat">{this.state.code}</div>
+          </div>
+        )}
       </div>
     );
   },
