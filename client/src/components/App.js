@@ -418,13 +418,13 @@ const App = React.createClass({
             {this.state.type !== 'AI' ? (
               <div>
                 <h1>
-                  <span className="M">D</span>
-                  <span className="A">E</span>
-                  <span className="S">E</span>
-                  <span className="T">Z</span>
-                  <span className="E">N</span>
-                  <span className="R">U</span>
-                  <span className="MIND">TS</span>
+                  <span className="M">M</span>
+                  <span className="A">A</span>
+                  <span className="S">S</span>
+                  <span className="T">T</span>
+                  <span className="E">E</span>
+                  <span className="R">R</span>
+                  <span className="MIND">MIND</span>
                 </h1>
 
                 <Rules rules={this.state.rules} toggleRules={this.toggleRules} />
@@ -450,7 +450,38 @@ const App = React.createClass({
               </div>
             ) : (
               <div>
-                <p>hallo</p>
+                <div>
+                  <h1>
+                    <span className="M">M</span>
+                    <span className="A">A</span>
+                    <span className="S">S</span>
+                    <span className="T">T</span>
+                    <span className="E">E</span>
+                    <span className="R">R</span>
+                    <span className="MIND">MIND</span>
+                  </h1>
+
+                  <Rules rules={this.state.rules} toggleRules={this.toggleRules} />
+
+                  <div className="clearfix">
+                    <DecodingBoard
+                      state={this.state}
+                      activatePeg={this.activatePeg}
+                      submitPegs={this.submitPegs}
+                    />
+                    <CodePegs
+                      selectedPeg={this.state.selectedPeg}
+                      colors={this.props.colors}
+                      activatePeg={this.activatePeg}
+                    />
+                  </div>
+                  <EndGame
+                    endGame={this.state.endGame}
+                    success={this.state.success}
+                    reloadGame={this.reloadGame}
+                  />
+                  <div className="cheat">{this.state.code}</div>
+                </div>
               </div>
             )}
           </div>
