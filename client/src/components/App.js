@@ -405,13 +405,13 @@ const App = React.createClass({
     return (
       <div>
         <h1>
-          <span className="M">M</span>
-          <span className="A">A</span>
-          <span className="S">S</span>
-          <span className="T">T</span>
-          <span className="E">E</span>
-          <span className="R">R</span>
-          <span className="MIND">MIND</span>
+          <span className="M">D</span>
+          <span className="A">E</span>
+          <span className="S">E</span>
+          <span className="T">Z</span>
+          <span className="E">N</span>
+          <span className="R">U</span>
+          <span className="MIND">TS</span>
         </h1>
         <Rules rules={this.state.rules} toggleRules={this.toggleRules} />
 
