@@ -322,6 +322,10 @@ footer p {
   margin-top:50%;
   justify-content:center;
 }
+
+.nice-button:hover{
+  cursor:pointer;
+}
 .clearfix:after {
   content: '';
   display: table;
