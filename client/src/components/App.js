@@ -209,39 +209,23 @@ const DecodingBoard = React.createClass({
     let rows = [];
     let rowName;
     let type = this.props.type;
-    if (type === 'AI') {
-      rowName = 'decodeRow-' + 1;
+
+    let generateRow = (i) => {
+      rowName = 'decodeRow-' + i + 1;
       rows.push(
         <Row
           name={rowName}
-          rowId={1}
-          type={type}
-          key={1}
+          key={i + 1}
+          rowId={i}
           state={this.props.state}
           activatePeg={this.props.activatePeg}
           submitPegs={this.props.submitPegs}
         />,
       );
-      return <div className="decoding-board left">{rows}</div>;
-    }
-    if (type !== 'AI') {
-      let generateRow = (i) => {
-        rowName = 'decodeRow-' + i + 1;
-        rows.push(
-          <Row
-            name={rowName}
-            key={i + 1}
-            rowId={i}
-            state={this.props.state}
-            activatePeg={this.props.activatePeg}
-            submitPegs={this.props.submitPegs}
-          />,
-        );
-      };
-      times(this.props.state.attempts)(generateRow);
+    };
+    times(this.props.state.attempts)(generateRow);
 
-      return <div className="decoding-board left">{rows}</div>;
-    }
+    return <div className="decoding-board left">{rows}</div>;
   },
 });
 
@@ -313,7 +297,7 @@ const App = React.createClass({
       exactMatches: 0,
       valueMatches: 0,
       pegsInRow: 4,
-      attempts: 10,
+      attempts: 0,
       rules: false,
       human: false,
       success: false,
@@ -321,15 +305,26 @@ const App = React.createClass({
     };
   },
 
-  reloadGame: function () {
-    this.setState({ success: false });
-    this.setState({ endGame: false });
-    this.setState({ code: false, type: false });
-    this.setState({ selectedPeg: this.props.colors.get(0) });
-    this.setState({ currentRow: 0 });
-    this.setState({ currentGuess: new Map() });
-    this.setState({ exactMatches: 0 });
-    this.setState({ valueMatches: 0 });
+  reloadGame: function (code, type) {
+    if (type === 'AI') {
+      this.setState({ code: code, type: type, attempts: 10 });
+      this.setState({ success: false });
+      this.setState({ endGame: false });
+      this.setState({ selectedPeg: this.props.colors.get(0) });
+      this.setState({ currentRow: 0 });
+      this.setState({ currentGuess: new Map() });
+      this.setState({ exactMatches: 0 });
+      this.setState({ valueMatches: 0 });
+    } else {
+      this.setState({ success: false });
+      this.setState({ endGame: false });
+      this.setState({ code: false, type: false });
+      this.setState({ selectedPeg: this.props.colors.get(0) });
+      this.setState({ currentRow: 0 });
+      this.setState({ currentGuess: new Map() });
+      this.setState({ exactMatches: 0 });
+      this.setState({ valueMatches: 0 });
+    }
   },
 
   toggleRules: function () {
@@ -383,43 +378,50 @@ const App = React.createClass({
   },
 
   submitPegs: function () {
-    let code = new Map(this.state.code);
+    let code;
     let pegs = this.state.currentGuess;
     let foundKey;
     let exactMatches = 0;
     let valueMatches = 0;
+    if (!!this.state.code) {
+      code = new Map(this.state.code);
+      for (let [key, value] of pegs) {
+        if (value === code.get(key)) {
+          exactMatches++;
+          pegs.delete(key);
+          code.delete(key);
+        }
+      }
+
+      // Second pass: Look for value matches anywhere in the code
+      for (let [key, value] of pegs) {
+        // attempt to find the peg in the remaining code
+        foundKey = this.keyOf(code, value);
+        if (foundKey !== -1) {
+          valueMatches++;
+          // remove the matched code peg, since it's been matched
+          code.delete(foundKey);
+        }
+      }
+
+      if (exactMatches === this.state.pegsInRow) {
+        this.setState({ endGame: true });
+        this.setState({ success: true });
+      } else if (this.state.attempts === this.state.currentRow + 1) {
+        this.setState({ endGame: true });
+      }
+
+      this.setState({ exactMatches: exactMatches });
+      this.setState({ valueMatches: valueMatches });
+      this.setState({ currentRow: this.state.currentRow + 1 });
+      this.setState({ currentGuess: new Map() });
+    } else {
+      this.setState({ code: pegs, attempts: 10 });
+      this.reloadGame(pegs, 'AI');
+    }
     // First pass: Look for value & position matches
     // Safely remove items if they match
-    for (let [key, value] of pegs) {
-      if (value === code.get(key)) {
-        exactMatches++;
-        pegs.delete(key);
-        code.delete(key);
-      }
-    }
-
-    // Second pass: Look for value matches anywhere in the code
-    for (let [key, value] of pegs) {
-      // attempt to find the peg in the remaining code
-      foundKey = this.keyOf(code, value);
-      if (foundKey !== -1) {
-        valueMatches++;
-        // remove the matched code peg, since it's been matched
-        code.delete(foundKey);
-      }
-    }
-
-    if (exactMatches === this.state.pegsInRow) {
-      this.setState({ endGame: true });
-      this.setState({ success: true });
-    } else if (this.state.attempts === this.state.currentRow + 1) {
-      this.setState({ endGame: true });
-    }
-
-    this.setState({ exactMatches: exactMatches });
-    this.setState({ valueMatches: valueMatches });
-    this.setState({ currentRow: this.state.currentRow + 1 });
-    this.setState({ currentGuess: new Map() });
+    //
   },
 
   render: function () {
@@ -430,11 +432,16 @@ const App = React.createClass({
           <div>
             <button
               className="nice-button"
-              onClick={() => this.setState({ type: 'human', code: this.getCode() })}
+              onClick={() =>
+                this.setState({ type: 'human', code: this.getCode(), attempts: 10 })
+              }
             >
               Mens
             </button>
-            <button className="nice-button" onClick={() => this.setState({ type: 'AI' })}>
+            <button
+              className="nice-button"
+              onClick={() => this.setState({ type: 'AI', attempts: 1 })}
+            >
               AI
             </button>
           </div>
@@ -522,7 +529,9 @@ const App = React.createClass({
                     <br />
                     <h2>Playing against: {this.state.type}</h2>
                     <Rules rules={this.state.rules} toggleRules={this.toggleRules} />
-
+                    <br />
+                    <br />
+                    <h2>The code the AI has to guess: {this.state.code}</h2>
                     <div className="clearfix">
                       <DecodingBoard
                         state={this.state}
