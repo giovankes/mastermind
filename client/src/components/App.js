@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+import axios from 'axios';
 let times = (n) => {
   return (f) => {
     Array(n)
@@ -295,6 +296,7 @@ const App = React.createClass({
       currentRow: 0,
       currentGuess: new Map(),
       exactMatches: 0,
+      startAi: false,
       valueMatches: 0,
       pegsInRow: 4,
       attempts: 0,
@@ -376,7 +378,20 @@ const App = React.createClass({
 
     return -1;
   },
-
+  guessTheCode: async function () {
+    console.log(this.state.code);
+    if (!this.state.endGame) {
+      let array = Array.from(this.state.code, ([name, value]) => ({ name, value }));
+      console.log(array);
+      const response = await axios.post('http://localhost:5000/mastermind', {
+        code: array,
+      });
+    }
+  },
+  startAi: function () {
+    this.setState({ startAi: true });
+    this.guessTheCode();
+  },
   submitPegs: function () {
     let code;
     let pegs = this.state.currentGuess;
@@ -543,6 +558,12 @@ const App = React.createClass({
                         colors={this.props.colors}
                         activatePeg={this.activatePeg}
                       />
+                      {!this.state.startAi && (
+                        <button className="nice-button" onClick={() => this.startAi()}>
+                          start
+                        </button>
+                      )}
+                      {!!this.state.startAi && <h3> guessing... </h3>}
                     </div>
                     <EndGame
                       endGame={this.state.endGame}
