@@ -426,6 +426,8 @@ const App = React.createClass({
                   <span className="R">R</span>
                   <span className="MIND">MIND</span>
                 </h1>
+                <br />
+                <h2>Playing against: {this.state.type}</h2>
 
                 <Rules rules={this.state.rules} toggleRules={this.toggleRules} />
 
@@ -460,7 +462,8 @@ const App = React.createClass({
                     <span className="R">R</span>
                     <span className="MIND">MIND</span>
                   </h1>
-
+                  <br />
+                  <h2>Playing against: {this.state.type}</h2>
                   <Rules rules={this.state.rules} toggleRules={this.toggleRules} />
 
                   <div className="clearfix">
