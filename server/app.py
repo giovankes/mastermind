@@ -9,6 +9,10 @@ CORS(app)
 
 @app.route("/mastermind", methods=["POST"])
 def index():
-    app.logger.info("hallo")
-    app.logger.info(request.json)
+    app.logger.info("hello!")
+    app.logger.info(request.json["code"])
+    code_to_guess = request.json["code"]
+
+    for i in code_to_guess:
+        app.logger.info(i)
     return "yes"
