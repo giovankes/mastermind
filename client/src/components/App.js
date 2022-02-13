@@ -139,14 +139,16 @@ const Row = React.createClass({
             submitPegs={this.props.submitPegs}
           />
         </div>
-        <div className="right">
-          <HintsRow
-            name={hintsRowName}
-            key={this.props.rowId}
-            rowId={this.props.rowId}
-            state={this.props.state}
-          />
-        </div>
+        {this.props.type && this.props.type !== 'AI' && (
+          <div className="right">
+            <HintsRow
+              name={hintsRowName}
+              key={this.props.rowId}
+              rowId={this.props.rowId}
+              state={this.props.state}
+            />
+          </div>
+        )}
       </div>
     );
   },
@@ -206,24 +208,40 @@ const DecodingBoard = React.createClass({
   render: function () {
     let rows = [];
     let rowName;
-
-    let generateRow = (i) => {
-      rowName = 'decodeRow-' + i + 1;
+    let type = this.props.type;
+    if (type === 'AI') {
+      rowName = 'decodeRow-' + 1;
       rows.push(
         <Row
           name={rowName}
-          key={i + 1}
-          rowId={i}
+          rowId={1}
+          type={type}
+          key={1}
           state={this.props.state}
           activatePeg={this.props.activatePeg}
           submitPegs={this.props.submitPegs}
         />,
       );
-    };
+      return <div className="decoding-board left">{rows}</div>;
+    }
+    if (type !== 'AI') {
+      let generateRow = (i) => {
+        rowName = 'decodeRow-' + i + 1;
+        rows.push(
+          <Row
+            name={rowName}
+            key={i + 1}
+            rowId={i}
+            state={this.props.state}
+            activatePeg={this.props.activatePeg}
+            submitPegs={this.props.submitPegs}
+          />,
+        );
+      };
+      times(this.props.state.attempts)(generateRow);
 
-    times(this.props.state.attempts)(generateRow);
-
-    return <div className="decoding-board left">{rows}</div>;
+      return <div className="decoding-board left">{rows}</div>;
+    }
   },
 });
 
@@ -287,7 +305,7 @@ const EndGame = React.createClass({
 const App = React.createClass({
   getInitialState: function () {
     return {
-      code: this.getCode(), //the main code to be decoded
+      code: false, //the main code to be decoded
       selectedPeg: this.props.colors.get(0),
       type: false,
       currentRow: 0,
@@ -306,7 +324,7 @@ const App = React.createClass({
   reloadGame: function () {
     this.setState({ success: false });
     this.setState({ endGame: false });
-    this.setState({ code: this.getCode() });
+    this.setState({ code: false, type: false });
     this.setState({ selectedPeg: this.props.colors.get(0) });
     this.setState({ currentRow: 0 });
     this.setState({ currentGuess: new Map() });
@@ -410,8 +428,15 @@ const App = React.createClass({
       <div>
         {!this.state.type ? (
           <div>
-            <button className="nice-button" onClick={() => this.setState({ type: 'human' })}>Mens</button>
-            <button className="nice-button" onClick={() => this.setState({ type: 'AI' })}> AI</button>
+            <button
+              className="nice-button"
+              onClick={() => this.setState({ type: 'human', code: this.getCode() })}
+            >
+              Mens
+            </button>
+            <button className="nice-button" onClick={() => this.setState({ type: 'AI' })}>
+              AI
+            </button>
           </div>
         ) : (
           <div>
@@ -452,39 +477,72 @@ const App = React.createClass({
               </div>
             ) : (
               <div>
-                <div>
-                  <h1>
-                    <span className="M">M</span>
-                    <span className="A">A</span>
-                    <span className="S">S</span>
-                    <span className="T">T</span>
-                    <span className="E">E</span>
-                    <span className="R">R</span>
-                    <span className="MIND">MIND</span>
-                  </h1>
-                  <br />
-                  <h2>Playing against: {this.state.type}</h2>
-                  <Rules rules={this.state.rules} toggleRules={this.toggleRules} />
-
-                  <div className="clearfix">
-                    <DecodingBoard
-                      state={this.state}
-                      activatePeg={this.activatePeg}
-                      submitPegs={this.submitPegs}
-                    />
-                    <CodePegs
-                      selectedPeg={this.state.selectedPeg}
-                      colors={this.props.colors}
-                      activatePeg={this.activatePeg}
-                    />
+                {!this.state.code ? (
+                  <div>
+                    <h1>
+                      <span className="M">M</span>
+                      <span className="A">A</span>
+                      <span className="S">S</span>
+                      <span className="T">T</span>
+                      <span className="E">E</span>
+                      <span className="R">R</span>
+                      <span className="MIND">MIND</span>
+                    </h1>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <h2> choose the code for the bot to guess:</h2>
+                    <div className="clearfix">
+                      <DecodingBoard
+                        state={this.state}
+                        activatePeg={this.activatePeg}
+                        submitPegs={this.submitPegs}
+                        type="AI"
+                      />
+                      <CodePegs
+                        selectedPeg={this.state.selectedPeg}
+                        colors={this.props.colors}
+                        activatePeg={this.activatePeg}
+                      />
+                    </div>
                   </div>
-                  <EndGame
-                    endGame={this.state.endGame}
-                    success={this.state.success}
-                    reloadGame={this.reloadGame}
-                  />
-                  <div className="cheat">{this.state.code}</div>
-                </div>
+                ) : (
+                  <div>
+                    <h1>
+                      <span className="M">M</span>
+                      <span className="A">A</span>
+                      <span className="S">S</span>
+                      <span className="T">T</span>
+                      <span className="E">E</span>
+                      <span className="R">R</span>
+                      <span className="MIND">MIND</span>
+                    </h1>
+                    <br />
+                    <h2>Playing against: {this.state.type}</h2>
+                    <Rules rules={this.state.rules} toggleRules={this.toggleRules} />
+
+                    <div className="clearfix">
+                      <DecodingBoard
+                        state={this.state}
+                        activatePeg={this.activatePeg}
+                        submitPegs={this.submitPegs}
+                      />
+                      <CodePegs
+                        selectedPeg={this.state.selectedPeg}
+                        colors={this.props.colors}
+                        activatePeg={this.activatePeg}
+                      />
+                    </div>
+                    <EndGame
+                      endGame={this.state.endGame}
+                      success={this.state.success}
+                      reloadGame={this.reloadGame}
+                    />
+                    <div className="cheat">{this.state.code}</div>
+                  </div>
+                )}
               </div>
             )}
           </div>
