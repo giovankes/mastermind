@@ -410,8 +410,8 @@ const App = React.createClass({
       <div>
         {!this.state.type ? (
           <div>
-            <button onClick={() => this.setState({ type: 'human' })}>Mens</button>
-            <button onClick={() => this.setState({ type: 'AI' })}> AI</button>
+            <button className="nice-button" onClick={() => this.setState({ type: 'human' })}>Mens</button>
+            <button className="nice-button" onClick={() => this.setState({ type: 'AI' })}> AI</button>
           </div>
         ) : (
           <div>
