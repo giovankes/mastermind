@@ -386,7 +386,7 @@ const App = React.createClass({
       const response = await axios.post('http://localhost:5000/mastermind', {
         code: array,
       });
-      if (response.data.guess) {
+      if (response && response.data.guess) {
         console.log('received response');
         console.log(response.data.guess);
       }
