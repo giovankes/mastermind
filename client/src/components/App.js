@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import axios from 'axios';
+
 let times = (n) => {
   return (f) => {
     Array(n)
@@ -233,7 +234,6 @@ const DecodingBoard = React.createClass({
 const CodePegs = React.createClass({
   render: function () {
     const pegs = [];
-
     let idVal;
     let pegClass;
 
