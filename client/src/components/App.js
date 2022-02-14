@@ -141,16 +141,14 @@ const Row = React.createClass({
             submitPegs={this.props.submitPegs}
           />
         </div>
-        {this.props.type && this.props.type !== 'AI' && (
-          <div className="right">
-            <HintsRow
-              name={hintsRowName}
-              key={this.props.rowId}
-              rowId={this.props.rowId}
-              state={this.props.state}
-            />
-          </div>
-        )}
+        <div className="right">
+          <HintsRow
+            name={hintsRowName}
+            key={this.props.rowId}
+            rowId={this.props.rowId}
+            state={this.props.state}
+          />
+        </div>
       </div>
     );
   },
