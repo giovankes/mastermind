@@ -378,17 +378,30 @@ const App = React.createClass({
 
     return -1;
   },
+
+  linkCode: function (guess) {
+    const code = new Map();
+    let color;
+
+    let generateCode = (guess) => {
+      guess.forEach((color, i) => {
+        code.set(i, this.props.colors.get(color));
+      });
+    };
+    generateCode(guess);
+    return code;
+  },
   guessTheCode: async function () {
-    console.log(this.state.code);
     if (!this.state.endGame) {
       let array = Array.from(this.state.code, ([name, value]) => ({ name, value }));
-      console.log(array);
       const response = await axios.post('http://localhost:5000/mastermind', {
         code: array,
       });
       if (response && response.data.guess) {
-        console.log('received response');
+        const response_to_map = this.linkCode(response.data.guess);
+        console.log(response_to_map);
         console.log(response.data.guess);
+        this.setState({ currentGuess: response_to_map });
       }
     }
   },
@@ -567,6 +580,12 @@ const App = React.createClass({
                           start
                         </button>
                       )}
+                      <button
+                        className="nice-button"
+                        onClick={() => console.log(this.state.code)}
+                      >
+                        log
+                      </button>
                       {!!this.state.startAi && <h3> guessing... </h3>}
                     </div>
                     <EndGame
