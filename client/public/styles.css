@@ -315,16 +315,16 @@ footer p {
 .right {
   float: right;
 }
-.nice-button{
-  padding:20px;
-  border-radius:25%;
-  margin:15%;
-  margin-top:50%;
-  justify-content:center;
+.nice-button {
+  padding: 20px;
+  border-radius: 25%;
+  margin: 15%;
+  margin-top: 50%;
+  justify-content: center;
 }
 
-.nice-button:hover{
-  cursor:pointer;
+.nice-button:hover {
+  cursor: pointer;
 }
 .clearfix:after {
   content: '';
