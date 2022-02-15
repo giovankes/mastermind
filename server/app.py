@@ -22,3 +22,6 @@ def index():
     lst_to_tuple = tuple(i for i in guess)
 
     return jsonify(guess=lst_to_tuple)
+
+if __name__ == '__main__':
+    app.run(debug=True)
