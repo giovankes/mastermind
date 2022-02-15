@@ -1,4 +1,4 @@
-from flask import Flask
+ from flask import Flask
 from flask import request, jsonify
 from flask_cors import CORS
 import logging
@@ -23,5 +23,6 @@ def index():
 
     return jsonify(guess=lst_to_tuple)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     app.run(debug=True)
