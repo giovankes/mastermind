@@ -1,4 +1,4 @@
-import remove_correct
+from remove_correct import remove_correct
 
 
 def find_close(actual, guess):
@@ -6,6 +6,7 @@ def find_close(actual, guess):
 
     close = 0
     for possible in guess:
-        del actual[actual.index(possible)]
-        close += 1
+        if possible in actual:
+            del actual[actual.index(possible)]
+            close += 1
     return close

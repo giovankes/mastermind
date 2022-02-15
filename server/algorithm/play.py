@@ -26,7 +26,7 @@ def play():
 
         pool = list(filter_pool(pool, guess, feedback, Feedback))
         print(len(pool))
-        guess = make_guess(pool, feedback)
+        guess = make_guess(pool, feedback, Feedback)
     print("\nYou win!")
 
 
