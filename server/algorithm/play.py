@@ -15,6 +15,7 @@ def play():
     pool = generate_initial_pool(choices, holes)
     guess = [0 if (i < (holes / 2)) else 1 for i in range(holes)]
     while True:
+        print("lmao")
         print("Try this: {0}".format(guess))
         correct = int(input("    # Red pegs?   "))
         close = int(input("    # White pegs? "))
@@ -22,9 +23,9 @@ def play():
         feedback = Feedback(correct, close)
         if feedback.correct == holes:
             break
-        pool = list(filter_pool(pool, guess, feedback, Feedback))
-        print("{0} possible choices left. Thinking...\n".format(len(pool)))
 
+        pool = list(filter_pool(pool, guess, feedback, Feedback))
+        print(len(pool))
         guess = make_guess(pool, feedback)
     print("\nYou win!")
 
