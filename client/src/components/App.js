@@ -136,19 +136,23 @@ const Row = React.createClass({
         </div>
         <div className="left">
           <SubmitButton
+            chosenCode={this.props.chosenCode}
+            creatingCode={this.props.state.creatingCode}
             rowId={this.props.rowId}
             state={this.props.state}
             submitPegs={this.props.submitPegs}
           />
         </div>
-        <div className="right">
-          <HintsRow
-            name={hintsRowName}
-            key={this.props.rowId}
-            rowId={this.props.rowId}
-            state={this.props.state}
-          />
-        </div>
+        {this.props.state.creatingCode !== true && (
+          <div className="right">
+            <HintsRow
+              name={hintsRowName}
+              key={this.props.rowId}
+              rowId={this.props.rowId}
+              state={this.props.state}
+            />
+          </div>
+        )}
       </div>
     );
   },
@@ -214,6 +218,8 @@ const DecodingBoard = React.createClass({
       rowName = 'decodeRow-' + i + 1;
       rows.push(
         <Row
+          chosenCode={this.props.chosenCode}
+          creatingCode={this.props.state.creatingCode}
           name={rowName}
           key={i + 1}
           rowId={i}
@@ -291,6 +297,7 @@ const App = React.createClass({
       code: false, //the main code to be decoded
       selectedPeg: this.props.colors.get(0),
       type: false,
+      creatingCode: false,
       currentRow: 0,
       currentGuess: new Map(),
       exactMatches: 0,
@@ -304,7 +311,10 @@ const App = React.createClass({
       endGame: false,
     };
   },
-
+  chosenCode: function () {
+    console.log('yes');
+    this.setState({ creatingCode: false });
+  },
   reloadGame: function (code, type) {
     if (type === 'AI') {
       this.setState({ code: code, type: type, attempts: 10 });
@@ -413,6 +423,10 @@ const App = React.createClass({
     let foundKey;
     let exactMatches = 0;
     let valueMatches = 0;
+
+    if (this.state.creatingCode === true) {
+      this.setState({ creatingCode: false });
+    }
     if (!!this.state.code) {
       code = new Map(this.state.code);
       for (let [key, value] of pegs) {
@@ -470,7 +484,9 @@ const App = React.createClass({
             </button>
             <button
               className="nice-button"
-              onClick={() => this.setState({ type: 'AI', attempts: 1 })}
+              onClick={() =>
+                this.setState({ type: 'AI', attempts: 1, creatingCode: true })
+              }
             >
               AI
             </button>
@@ -534,6 +550,7 @@ const App = React.createClass({
                     <div className="clearfix">
                       <DecodingBoard
                         state={this.state}
+                        chosenCode={this.chosenCode}
                         activatePeg={this.activatePeg}
                         submitPegs={this.submitPegs}
                         type="AI"
