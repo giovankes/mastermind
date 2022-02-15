@@ -1,6 +1,5 @@
-# mastermind project for uni
+# MADE BY GIOVANNI
 
-### written by Giovanni
 
 
 
