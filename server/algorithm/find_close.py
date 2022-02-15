@@ -1,3 +1,6 @@
+import remove_correct
+
+
 def find_close(actual, guess):
     actual, guess = remove_correct(actual, guess)
 
