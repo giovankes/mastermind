@@ -559,7 +559,7 @@ const App = React.createClass({
                     <br />
                     <br />
                     <br />
-                    <h2> choose the code for the bot to guess:</h2>
+                    <h2> choose the code for the algorithm to guess:</h2>
                     <div className="clearfix">
                       <DecodingBoard
                         state={this.state}
