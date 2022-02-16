@@ -401,12 +401,15 @@ const App = React.createClass({
     return code;
   },
 
+  //NOTE: send request to API
   guessTheCode: async function () {
     if (!this.state.endGame) {
+      let colors = Array.from(this.props.colors, ([name, value]) => ({ name, value }));
       let array = Array.from(this.state.code, ([name, value]) => ({ name, value }));
       const response = await axios.post('http://localhost:5000/mastermind', {
         code: array,
         holes: this.state.pegsInRow,
+        colors: colors.length,
       });
       if (response && response.data.guess) {
         const response_to_map = this.linkCode(response.data.guess);
