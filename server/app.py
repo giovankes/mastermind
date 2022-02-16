@@ -23,6 +23,7 @@ def index():
     guess = list([0 if (i < (holes / 2)) else 1 for i in range(holes)])
 
     lst_to_tuple = tuple(i for i in guess)
+
     # BUG: can't have a while loop as every request is a new function call.
     # BUG: so i'll have to re-generate the pool on the new choices and holes? i guess
     while True:
