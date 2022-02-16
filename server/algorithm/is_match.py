@@ -1,4 +1,4 @@
-from get_feedback import get_feedback
+from algorithm.get_feedback import get_feedback
 
 
 def is_match(guess, feedback, possible, Feedback):

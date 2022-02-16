@@ -1,5 +1,5 @@
-from find_correct import find_correct
-from find_close import find_close
+from algorithm.find_correct import find_correct
+from algorithm.find_close import find_close
 
 
 def get_feedback(actual, guess, Feedback):

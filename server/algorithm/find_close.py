@@ -1,4 +1,4 @@
-from remove_correct import remove_correct
+from algorithm.remove_correct import remove_correct
 
 
 def find_close(actual, guess):

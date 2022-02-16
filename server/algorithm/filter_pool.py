@@ -1,4 +1,4 @@
-from is_match import is_match
+from algorithm.is_match import is_match
 
 
 def filter_pool(pool, guess, feedback, Feedback):

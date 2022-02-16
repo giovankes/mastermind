@@ -1,4 +1,4 @@
-from filter_pool import filter_pool
+from algorithm.filter_pool import filter_pool
 
 
 def make_guess(pool, feedback, Feedback):
