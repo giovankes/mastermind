@@ -311,10 +311,12 @@ const App = React.createClass({
       endGame: false,
     };
   },
+
   chosenCode: function () {
     console.log('yes');
     this.setState({ creatingCode: false });
   },
+
   reloadGame: function (code, type) {
     if (type === 'AI') {
       this.setState({ code: code, type: type, attempts: 10 });
@@ -398,11 +400,13 @@ const App = React.createClass({
     generateCode(guess);
     return code;
   },
+
   guessTheCode: async function () {
     if (!this.state.endGame) {
       let array = Array.from(this.state.code, ([name, value]) => ({ name, value }));
       const response = await axios.post('http://localhost:5000/mastermind', {
         code: array,
+        holes: this.state.pegsInRow,
       });
       if (response && response.data.guess) {
         const response_to_map = this.linkCode(response.data.guess);

@@ -17,10 +17,10 @@ CORS(app)
 @app.route("/mastermind", methods=["POST"])
 def index():
     app.logger.info(request.json["code"])
+    app.logger.info(request.json["holes"])
+    holes = request.json["holes"]
     code_to_guess = request.json["code"]
     guess = list()
-    for i in code_to_guess:
-        app.logger.info(i)
 
     lst_to_tuple = tuple(i for i in guess)
 
