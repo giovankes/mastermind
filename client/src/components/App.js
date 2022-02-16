@@ -389,7 +389,6 @@ const App = React.createClass({
 
   linkCode: function (guess) {
     const code = new Map();
-    let color;
 
     let generateCode = (guess) => {
       guess.forEach((color, i) => {
@@ -413,10 +412,12 @@ const App = React.createClass({
       }
     }
   },
+
   startAi: function () {
     this.setState({ startAi: true });
     this.guessTheCode();
   },
+
   submitPegs: function () {
     let code;
     let pegs = this.state.currentGuess;
@@ -427,6 +428,7 @@ const App = React.createClass({
     if (this.state.creatingCode === true) {
       this.setState({ creatingCode: false });
     }
+
     if (!!this.state.code) {
       code = new Map(this.state.code);
       for (let [key, value] of pegs) {
@@ -459,13 +461,13 @@ const App = React.createClass({
       this.setState({ valueMatches: valueMatches });
       this.setState({ currentRow: this.state.currentRow + 1 });
       this.setState({ currentGuess: new Map() });
+      if (this.state.type === 'AI') {
+        this.startAi();
+      }
     } else {
       this.setState({ code: pegs, attempts: 10 });
       this.reloadGame(pegs, 'AI');
     }
-    // First pass: Look for value & position matches
-    // Safely remove items if they match
-    //
   },
 
   render: function () {
