@@ -1,8 +1,6 @@
 # MADE BY GIOVANNI
 
 
-
-
 ## LIST OF SOURCES THAT I'VE USED WHILE CREATING THIS PROJECT:
 
 - https://docs.python.org/3/library/collections.html
