@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import request, jsonify
 from flask_cors import CORS
+from algorithm.generate_initial_pool import generate_initial_pool
 import logging
 import random
 import itertools
@@ -8,11 +9,6 @@ import collections
 
 
 Feedback = collections.namedtuple("Feedback", ["correct", "close"])
-
-
-def generate_initial_pool(choices, holes):
-    return list(itertools.product(*[range(choices) for _ in xrange(holes)]))
-
 
 app = Flask(__name__)
 CORS(app)
@@ -25,8 +21,6 @@ def index():
     guess = list()
     for i in code_to_guess:
         app.logger.info(i)
-        random_number = random.randint(0, 4)
-        guess.append(random_number)
 
     lst_to_tuple = tuple(i for i in guess)
 
