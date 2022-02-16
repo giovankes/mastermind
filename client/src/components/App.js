@@ -297,6 +297,7 @@ const App = React.createClass({
       code: false, //the main code to be decoded
       selectedPeg: this.props.colors.get(0),
       type: false,
+      tries: 0,
       creatingCode: false,
       currentRow: 0,
       currentGuess: new Map(),
@@ -402,14 +403,19 @@ const App = React.createClass({
   },
 
   //NOTE: send request to API
-  guessTheCode: async function () {
+  guessTheCode: async function (exactMatches, valueMatches) {
     if (!this.state.endGame) {
+      await this.setState({ tries: this.state.tries + 1 });
+      console.log(this.state.tries);
       let colors = Array.from(this.props.colors, ([name, value]) => ({ name, value }));
       let array = Array.from(this.state.code, ([name, value]) => ({ name, value }));
       const response = await axios.post('http://localhost:5000/mastermind', {
         code: array,
         holes: this.state.pegsInRow,
         colors: colors.length,
+        correct: exactMatches || 0,
+        close: valueMatches || 0,
+        tries: this.state.tries,
       });
       if (response && response.data.guess) {
         const response_to_map = this.linkCode(response.data.guess);
@@ -431,7 +437,6 @@ const App = React.createClass({
     let foundKey;
     let exactMatches = 0;
     let valueMatches = 0;
-
     if (this.state.creatingCode === true) {
       this.setState({ creatingCode: false });
     }
@@ -463,13 +468,12 @@ const App = React.createClass({
       } else if (this.state.attempts === this.state.currentRow + 1) {
         this.setState({ endGame: true });
       }
-
       this.setState({ exactMatches: exactMatches });
       this.setState({ valueMatches: valueMatches });
       this.setState({ currentRow: this.state.currentRow + 1 });
       this.setState({ currentGuess: new Map() });
       if (this.state.type === 'AI') {
-        this.startAi();
+        this.guessTheCode(exactMatches, valueMatches);
       }
     } else {
       this.setState({ code: pegs, attempts: 10 });
