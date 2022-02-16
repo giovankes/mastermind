@@ -27,21 +27,17 @@ def index():
     correct_pegs = request.json["correct"]
     close = request.json["close"]
     code = request.json["code"]
-    tries = request.json["tries"]
-    pool = generate_initial_pool(choices, holes)
+    tries = int(request.json["tries"])
     feedback = Feedback(correct_pegs, close)
-    guess = list([0 if (i < (holes / 2)) else 1 for i in range(holes)])
+    guess = [0 if (i < (holes / 2)) else 1 for i in range(holes)]
     # BUG: can't have a while loop as every request is a new function call.
     # BUG: so i'll have to re-generate the pool on the new choices and holes? i guess
-    app.logger.info(tries)
     if tries > 1:
         if feedback.correct == holes:
             return
-        pool = list(filter_pool(pool, guess, feedback, Feedback))
-        guess = make_guess(pool, feedback, Feedback)
-        app.logger.info(guess)
-        lst_to_tuple = tuple(i for i in guess)
 
+        pool = generate_initial_pool(choices, holes)
+        app.logger.info(pool)
         return jsonify(guess=lst_to_tuple)
     else:
         # NOTE: first guess
