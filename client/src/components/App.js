@@ -417,6 +417,8 @@ const App = React.createClass({
         close: valueMatches || 0,
         tries: this.state.tries,
       });
+      console.log(this.state.pegsInRow)
+      console.log(array)
       if (response && response.data.guess) {
         const response_to_map = this.linkCode(response.data.guess);
         console.log(response_to_map);
