@@ -11,13 +11,14 @@ import collections
 
 # NOTE: my functions
 from algorithm.generate_initial_pool import generate_initial_pool
-from algorithm.filter_pool import filter_pool
-from algorithm.make_guess import make_guess
+from algorithm.reduce import reduce
 
 Feedback = collections.namedtuple("Feedback", ["correct", "close"])
 
 app = Flask(__name__)
 CORS(app)
+
+pool = generate_initial_pool(choices, holes)
 
 
 @app.route("/mastermind", methods=["POST"])
@@ -27,23 +28,17 @@ def index():
     correct_pegs = request.json["correct"]
     close = request.json["close"]
     code = request.json["code"]
-    tries = int(request.json["tries"])
+    tries = request.json["tries"]
+    app.logger.info(pool)
     feedback = Feedback(correct_pegs, close)
-    guess = [0 if (i < (holes / 2)) else 1 for i in range(holes)]
-    # BUG: can't have a while loop as every request is a new function call.
-    # BUG: so i'll have to re-generate the pool on the new choices and holes? i guess
+    guess = random.choice(pool)
+
     if tries > 1:
-        if feedback.correct == holes:
-            return
+        pool = reduce(pool, correct_pegs, close, guess, app)
 
-        pool = generate_initial_pool(choices, holes)
-        app.logger.info(pool)
-        return jsonify(guess=lst_to_tuple)
-    else:
-        # NOTE: first guess
-        lst_to_tuple = tuple(i for i in guess)
+    lst_to_tuple = tuple(i for i in guess)
 
-        return jsonify(guess=lst_to_tuple)
+    return jsonify(guess=lst_to_tuple)
 
 
 if __name__ == "__main__":
