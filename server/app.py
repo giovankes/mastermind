@@ -18,8 +18,6 @@ Feedback = collections.namedtuple("Feedback", ["correct", "close"])
 app = Flask(__name__)
 CORS(app)
 
-pool = generate_initial_pool(choices, holes)
-
 
 @app.route("/mastermind", methods=["POST"])
 def index():
@@ -29,13 +27,12 @@ def index():
     close = request.json["close"]
     code = request.json["code"]
     tries = request.json["tries"]
-    app.logger.info(pool)
     feedback = Feedback(correct_pegs, close)
+
+    pool = reduce(choices, holes, tries, pool, correct_pegs, close, guess, app)
     guess = random.choice(pool)
 
-    if tries > 1:
-        pool = reduce(pool, correct_pegs, close, guess, app)
-
+    app.logger.info(pool)
     lst_to_tuple = tuple(i for i in guess)
 
     return jsonify(guess=lst_to_tuple)
