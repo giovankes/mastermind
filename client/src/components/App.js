@@ -299,6 +299,7 @@ const App = React.createClass({
       tries: 0,
       creatingCode: false,
       currentRow: 0,
+      algorithm:'',
       currentGuess: new Map(),
       exactMatches: 0,
       startAi: false,
@@ -416,6 +417,7 @@ const App = React.createClass({
         correct: exactMatches || 0,
         close: valueMatches || 0,
         tries: this.state.tries,
+        algorithm:this.state.algorithm,
       });
       if (response && response.data.guess) {
         if (response.data.guess) {
@@ -575,6 +577,16 @@ const App = React.createClass({
                         activatePeg={this.activatePeg}
                       />
                     </div>
+                    <button onClick={() =>this.setState({algorithm:'simpel'})}>
+                      simpel
+                    </button>
+                    <button onClick={()=> this.setState({algorithm:"kooi"})}>
+                      kooi 
+                    <button onClick={() => this.setState({algorithm:"idk"})}>
+                      idk
+                  </button>
+
+                    </button>
                   </div>
                 ) : (
                   <div>

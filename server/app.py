@@ -18,6 +18,8 @@ from algorithm.generate_initial_pool import generate_initial_pool
 app = Flask(__name__)
 CORS(app)
 
+def bogosort():
+
 
 @app.route("/mastermind", methods=["POST"])
 def index():
@@ -25,6 +27,7 @@ def index():
     choices = request.json["colors"]
     code_client = request.json["code"]
     tries = request.json["tries"]
+    algorithm = request.json["algorithm"]
     code = list()
     for i in code_client:
         # NOTE: VERY VERY DISGUSTING IF ELSE BUT I HAVE NO OTHER CHOICE
@@ -61,6 +64,7 @@ def index():
     return jsonify(guess=guesses)
 
 
+    return 
 def convert(code):
     return tuple(i for i in code)
 
