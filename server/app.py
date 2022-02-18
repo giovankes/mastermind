@@ -14,7 +14,6 @@ import json
 
 # NOTE: my functions
 from algorithm.generate_initial_pool import generate_initial_pool
-from algorithm.reduce import reduce
 
 app = Flask(__name__)
 CORS(app)
@@ -28,7 +27,7 @@ def index():
     tries = request.json["tries"]
     code = list()
     for i in code_client:
-        # VERY VERY DISGUSTING IF ELSE BUT I HAVE NO OTHER CHOICE
+        # NOTE: VERY VERY DISGUSTING IF ELSE BUT I HAVE NO OTHER CHOICE
         if i["value"] == "zero":
             code.append(0)
         elif i["value"] == "one":
@@ -48,16 +47,18 @@ def index():
     initial_guess = random.choice(initial_pool)
     initial_pool_score = evaluate(initial_guess, code)
     possibleCodes = reduce(initial_pool, initial_guess, initial_pool_score)
+    guesses = list()
+    guesses.append(initial_guess)
     while gepakt != True:
         guess = possibleCodes[0]
         score = evaluate(guess, code)
         possibleCodes = reduce(possibleCodes, guess, score)
-        app.logger.info(code)
+        guesses.append(guess)
         if guess == code:
             app.logger.info("hoppa")
             gepakt = True
-
-    return jsonify(guess=tuple(i for i in guess))
+    app.logger.info(guesses)
+    return jsonify(guess=guesses)
 
 
 def convert(code):
