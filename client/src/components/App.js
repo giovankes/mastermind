@@ -80,6 +80,7 @@ const DecodeRow = React.createClass({
 
       pegs.push(
         <Peg
+          state={this.props.state}
           idVal={idVal}
           name={this.props.name}
           value={i + 1}
@@ -92,7 +93,6 @@ const DecodeRow = React.createClass({
     };
 
     times(this.props.state.pegsInRow)(generatePeg);
-
     return <div className="decode-row">{pegs}</div>;
   },
 });
@@ -106,7 +106,6 @@ const SubmitButton = React.createClass({
         this.props.state.currentRow === this.props.rowId
       ),
     });
-
     return <button className={className} onClick={this.props.submitPegs}></button>;
   },
 });
@@ -121,11 +120,11 @@ const Row = React.createClass({
     });
     const hintsRowName = 'hintsRow-' + this.props.rowId;
     const rowName = 'decodeRow-' + this.props.rowId;
-
     return (
       <div className={rowClassName}>
         <div className="left">
           <DecodeRow
+            submitPegs={this.props.submitPegs}
             name={rowName}
             key={this.props.rowId}
             rowId={this.props.rowId}
@@ -310,11 +309,11 @@ const App = React.createClass({
       human: false,
       success: false,
       endGame: false,
+      algorithmGuesses: [],
     };
   },
 
   chosenCode: function () {
-    console.log('yes');
     this.setState({ creatingCode: false });
   },
 
@@ -328,6 +327,7 @@ const App = React.createClass({
       this.setState({ currentGuess: new Map() });
       this.setState({ exactMatches: 0 });
       this.setState({ valueMatches: 0 });
+      this.guessTheCode();
     } else {
       this.setState({ success: false });
       this.setState({ endGame: false });
@@ -358,7 +358,7 @@ const App = React.createClass({
     };
 
     times(this.props.codeLength)(generateCode);
-
+    console.log(code);
     return code;
   },
 
@@ -390,15 +390,16 @@ const App = React.createClass({
     return -1;
   },
 
-  linkCode: function (guess) {
+  linkCode: async function (guess) {
     const code = new Map();
-
+    console.log(guess);
     let generateCode = (guess) => {
       guess.forEach((color, i) => {
         code.set(i, this.props.colors.get(color));
       });
     };
-    generateCode(guess);
+
+    await generateCode(guess);
     return code;
   },
 
@@ -406,7 +407,6 @@ const App = React.createClass({
   guessTheCode: async function (exactMatches, valueMatches) {
     if (!this.state.endGame) {
       await this.setState({ tries: this.state.tries + 1 });
-      console.log(this.state.tries);
       let colors = Array.from(this.props.colors, ([name, value]) => ({ name, value }));
       let array = Array.from(this.state.code, ([name, value]) => ({ name, value }));
       const response = await axios.post('http://localhost:5000/mastermind', {
@@ -417,32 +417,35 @@ const App = React.createClass({
         close: valueMatches || 0,
         tries: this.state.tries,
       });
-      console.log(this.state.pegsInRow)
-      console.log(array)
       if (response && response.data.guess) {
-        const response_to_map = this.linkCode(response.data.guess);
-        console.log(response_to_map);
-        console.log(response.data.guess);
-        this.setState({ currentGuess: response_to_map });
+        if (response.data.guess) {
+          console.log(response.data.guess)
+          for (var i = 0; i < response.data.guess.length; i++) {
+            console.log(response.data.guess);
+            const response_to_map = await this.linkCode(response.data.guess[i]);
+            console.log(response_to_map);
+            await this.setState({ currentGuess: response_to_map });
+            this.submitPegs();
+            console.log(this.state.currentGuess) 
+          }
+        } else {
+          const response_to_map = this.linkCode(response.data.guess);
+          this.setState({ currentGuess: response_to_map });
+        }
       }
     }
   },
 
-  startAi: function () {
-    this.setState({ startAi: true });
-    this.guessTheCode();
-  },
-
-  submitPegs: function () {
+  submitPegs: async function () {
     let code;
     let pegs = this.state.currentGuess;
     let foundKey;
     let exactMatches = 0;
     let valueMatches = 0;
+
     if (this.state.creatingCode === true) {
       this.setState({ creatingCode: false });
     }
-
     if (!!this.state.code) {
       code = new Map(this.state.code);
       for (let [key, value] of pegs) {
@@ -473,10 +476,7 @@ const App = React.createClass({
       this.setState({ exactMatches: exactMatches });
       this.setState({ valueMatches: valueMatches });
       this.setState({ currentRow: this.state.currentRow + 1 });
-      this.setState({ currentGuess: new Map() });
-      if (this.state.type === 'AI') {
-        this.guessTheCode(exactMatches, valueMatches);
-      }
+
     } else {
       this.setState({ code: pegs, attempts: 10 });
       this.reloadGame(pegs, 'AI');
@@ -484,7 +484,6 @@ const App = React.createClass({
   },
 
   render: function () {
-    console.log(this.state);
     return (
       <div>
         {!this.state.type ? (
@@ -593,7 +592,7 @@ const App = React.createClass({
                     <Rules rules={this.state.rules} toggleRules={this.toggleRules} />
                     <br />
                     <br />
-                    <h2>The code the AI has to guess: {this.state.code}</h2>
+                    <h2>The code the algorithm has to guess: {this.state.code}</h2>
                     <div className="clearfix">
                       <DecodingBoard
                         state={this.state}
@@ -605,18 +604,6 @@ const App = React.createClass({
                         colors={this.props.colors}
                         activatePeg={this.activatePeg}
                       />
-                      {!this.state.startAi && (
-                        <button className="nice-button" onClick={() => this.startAi()}>
-                          start
-                        </button>
-                      )}
-                      <button
-                        className="nice-button"
-                        onClick={() => console.log(this.state.code)}
-                      >
-                        log
-                      </button>
-                      {!!this.state.startAi && <h3> guessing... </h3>}
                     </div>
                     <EndGame
                       endGame={this.state.endGame}
