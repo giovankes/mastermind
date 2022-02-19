@@ -64,7 +64,6 @@ def index():
     return jsonify(guess=guesses)
 
 
-    return 
 def convert(code):
     return tuple(i for i in code)
 
