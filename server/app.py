@@ -18,8 +18,6 @@ from algorithm.generate_initial_pool import generate_initial_pool
 app = Flask(__name__)
 CORS(app)
 
-def bogosort():
-
 
 @app.route("/mastermind", methods=["POST"])
 def index():
