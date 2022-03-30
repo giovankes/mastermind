@@ -1,4 +1,6 @@
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
+
 const Rules = ({ rules, toggleRules }) => {
   const className = classNames({
     info: true,
@@ -29,3 +31,10 @@ const Rules = ({ rules, toggleRules }) => {
     </div>
   );
 };
+
+Rules.propTypes = {
+  rules: PropTypes.bool,
+  toggleRules: PropTypes.func,
+};
+
+export default Rules;
