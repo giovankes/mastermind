@@ -14,5 +14,5 @@ ReactDOM.render(
       [5, 'five'],
     ]),
   }),
-  document.getElementById('mastermind'),
+  document.getElementById('mastermind')
 );

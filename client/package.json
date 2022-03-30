@@ -1,18 +1,15 @@
 {
-  "name": "mastermind",
+  "name": "client",
   "version": "0.1.0",
-  "author": "Giotje",
-  "main": "./public/electron.js",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^5.16.2",
-    "@testing-library/react": "^12.1.2",
+    "@testing-library/jest-dom": "^5.16.3",
+    "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",
-    "axios": "^0.25.0",
+    "axios": "^0.26.1",
     "classnames": "^2.3.1",
-    "prop-types": "^15.8.1",
-    "react": "^15.7.0",
-    "react-dom": "^15.7.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
     "react-scripts": "5.0.0",
     "web-vitals": "^2.1.4"
   },
@@ -20,8 +17,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "dev": "concurrently \"cross-env BROWSER=none npm start\" \"wait-on http://localhost:3000 && electron .\""
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
@@ -42,20 +38,18 @@
     ]
   },
   "devDependencies": {
+    "@babel/cli": "^7.17.6",
+    "@babel/core": "^7.17.8",
+    "@babel/eslint-parser": "^7.17.0",
+    "@babel/preset-react": "^7.16.7",
     "babel-eslint": "^10.1.0",
-    "concurrently": "^7.0.0",
-    "cross-env": "^7.0.3",
-    "electron": "^17.0.0",
-    "electron-is-dev": "^2.0.0",
-    "eslint": "^8.8.0",
+    "eslint": "^8.12.0",
     "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-react": "^7.28.0",
-    "prettier": "^2.5.1",
-    "react-router-dom": "^6.2.1",
-    "wait-on": "^6.0.0"
+    "eslint-plugin-react": "^7.29.4",
+    "prettier": "^2.6.1"
   }
 }

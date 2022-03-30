@@ -1,11 +1,10 @@
 {
   "printWidth": 80,
   "singleQuote": true,
-  "trailingComma": "all",
+  "trailingComma": "es5",
   "arrowParens": "always",
   "bracketSpacing": true,
   "insertPragma": false,
-  "printWidth": 90,
   "proseWrap": "preserve",
   "requirePragma": false,
   "semi": true,

@@ -24,11 +24,15 @@ const Rules = React.createClass({
           {infoText}
         </span>
         <p className={className}>
-          Try to guess the pattern, in both order and color, within ten turns. After
-          submitting a row, a small black peg is placed for each code peg from the guess
-          which is correct in both color and position. A white peg indicates the existence
-          of a correct color code peg placed in the wrong position. More info on{' '}
-          <a href="https://en.wikipedia.org/wiki/Mastermind_(board_game)" target="_blank">
+          Try to guess the pattern, in both order and color, within ten turns.
+          After submitting a row, a small black peg is placed for each code peg
+          from the guess which is correct in both color and position. A white
+          peg indicates the existence of a correct color code peg placed in the
+          wrong position. More info on{' '}
+          <a
+            href="https://en.wikipedia.org/wiki/Mastermind_(board_game)"
+            target="_blank"
+          >
             Wikipedia
           </a>
           .
@@ -88,7 +92,7 @@ const DecodeRow = React.createClass({
           pegClass={pegClass}
           isCurrentRow={this.props.isCurrentRow}
           activatePeg={this.props.activatePeg}
-        />,
+        />
       );
     };
 
@@ -106,7 +110,9 @@ const SubmitButton = React.createClass({
         this.props.state.currentRow === this.props.rowId
       ),
     });
-    return <button className={className} onClick={this.props.submitPegs}></button>;
+    return (
+      <button className={className} onClick={this.props.submitPegs}></button>
+    );
   },
 });
 
@@ -197,7 +203,7 @@ const HintsRow = React.createClass({
           hintClass={hintClass}
           rowId={this.props.rowId}
           state={this.props.state}
-        />,
+        />
       );
     };
 
@@ -225,7 +231,7 @@ const DecodingBoard = React.createClass({
           state={this.props.state}
           activatePeg={this.props.activatePeg}
           submitPegs={this.props.submitPegs}
-        />,
+        />
       );
     };
     times(this.props.state.attempts)(generateRow);
@@ -255,7 +261,7 @@ const CodePegs = React.createClass({
           pegClass={pegClass}
           isCurrentRow={true}
           activatePeg={this.props.activatePeg}
-        />,
+        />
       );
     }
 
@@ -374,7 +380,7 @@ const App = React.createClass({
         this.setState({
           currentGuess: this.state.currentGuess.set(
             event.target.value - 1,
-            this.state.selectedPeg,
+            this.state.selectedPeg
           ),
         });
       }
@@ -408,8 +414,14 @@ const App = React.createClass({
   guessTheCode: async function (exactMatches, valueMatches) {
     if (!this.state.endGame) {
       await this.setState({ tries: this.state.tries + 1 });
-      let colors = Array.from(this.props.colors, ([name, value]) => ({ name, value }));
-      let array = Array.from(this.state.code, ([name, value]) => ({ name, value }));
+      let colors = Array.from(this.props.colors, ([name, value]) => ({
+        name,
+        value,
+      }));
+      let array = Array.from(this.state.code, ([name, value]) => ({
+        name,
+        value,
+      }));
       const response = await axios.post('http://localhost:5000/mastermind', {
         code: array,
         holes: this.state.pegsInRow,
@@ -492,7 +504,11 @@ const App = React.createClass({
             <button
               className="nice-button"
               onClick={() =>
-                this.setState({ type: 'human', code: this.getCode(), attempts: 10 })
+                this.setState({
+                  type: 'human',
+                  code: this.getCode(),
+                  attempts: 10,
+                })
               }
             >
               Mens
@@ -522,7 +538,10 @@ const App = React.createClass({
                 <br />
                 <h2>Playing against: {this.state.type}</h2>
 
-                <Rules rules={this.state.rules} toggleRules={this.toggleRules} />
+                <Rules
+                  rules={this.state.rules}
+                  toggleRules={this.toggleRules}
+                />
 
                 <div className="clearfix">
                   <DecodingBoard
@@ -576,12 +595,18 @@ const App = React.createClass({
                         activatePeg={this.activatePeg}
                       />
                     </div>
-                    <button onClick={() => this.setState({ algorithm: 'simpel' })}>
+                    <button
+                      onClick={() => this.setState({ algorithm: 'simpel' })}
+                    >
                       simpel
                     </button>
-                    <button onClick={() => this.setState({ algorithm: 'kooi' })}>
+                    <button
+                      onClick={() => this.setState({ algorithm: 'kooi' })}
+                    >
                       kooi
-                      <button onClick={() => this.setState({ algorithm: 'idk' })}>
+                      <button
+                        onClick={() => this.setState({ algorithm: 'idk' })}
+                      >
                         idk
                       </button>
                     </button>
@@ -599,10 +624,15 @@ const App = React.createClass({
                     </h1>
                     <br />
                     <h2>Playing against: {this.state.type}</h2>
-                    <Rules rules={this.state.rules} toggleRules={this.toggleRules} />
+                    <Rules
+                      rules={this.state.rules}
+                      toggleRules={this.toggleRules}
+                    />
                     <br />
                     <br />
-                    <h2>The code the algorithm has to guess: {this.state.code}</h2>
+                    <h2>
+                      The code the algorithm has to guess: {this.state.code}
+                    </h2>
                     <div className="clearfix">
                       <DecodingBoard
                         state={this.state}
