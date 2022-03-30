@@ -299,7 +299,7 @@ const App = React.createClass({
       tries: 0,
       creatingCode: false,
       currentRow: 0,
-      algorithm:'',
+      algorithm: '',
       currentGuess: new Map(),
       exactMatches: 0,
       startAi: false,
@@ -417,18 +417,18 @@ const App = React.createClass({
         correct: exactMatches || 0,
         close: valueMatches || 0,
         tries: this.state.tries,
-        algorithm:this.state.algorithm,
+        algorithm: this.state.algorithm,
       });
       if (response && response.data.guess) {
         if (response.data.guess) {
-          console.log(response.data.guess)
+          console.log(response.data.guess);
           for (var i = 0; i < response.data.guess.length; i++) {
             console.log(response.data.guess);
             const response_to_map = await this.linkCode(response.data.guess[i]);
             console.log(response_to_map);
             await this.setState({ currentGuess: response_to_map });
             this.submitPegs();
-            console.log(this.state.currentGuess) 
+            console.log(this.state.currentGuess);
           }
         } else {
           const response_to_map = this.linkCode(response.data.guess);
@@ -478,7 +478,6 @@ const App = React.createClass({
       this.setState({ exactMatches: exactMatches });
       this.setState({ valueMatches: valueMatches });
       this.setState({ currentRow: this.state.currentRow + 1 });
-
     } else {
       this.setState({ code: pegs, attempts: 10 });
       this.reloadGame(pegs, 'AI');
@@ -577,15 +576,14 @@ const App = React.createClass({
                         activatePeg={this.activatePeg}
                       />
                     </div>
-                    <button onClick={() =>this.setState({algorithm:'simpel'})}>
+                    <button onClick={() => this.setState({ algorithm: 'simpel' })}>
                       simpel
                     </button>
-                    <button onClick={()=> this.setState({algorithm:"kooi"})}>
-                      kooi 
-                    <button onClick={() => this.setState({algorithm:"idk"})}>
-                      idk
-                  </button>
-
+                    <button onClick={() => this.setState({ algorithm: 'kooi' })}>
+                      kooi
+                      <button onClick={() => this.setState({ algorithm: 'idk' })}>
+                        idk
+                      </button>
                     </button>
                   </div>
                 ) : (
