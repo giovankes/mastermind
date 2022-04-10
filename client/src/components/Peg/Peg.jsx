@@ -15,7 +15,7 @@ const Peg = ({ pegClass, name, value, idVal, isCurrentRow, activatePeg }) => (
 Peg.propTypes = {
   pegClass: PropTypes.string,
   name: PropTypes.string,
-  value: PropTypes.String,
+  value: PropTypes.string,
   idVal: PropTypes.number,
   isCurrentRow: PropTypes.bool,
   activatePeg: PropTypes.func,

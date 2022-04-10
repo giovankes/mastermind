@@ -1,4 +1,5 @@
 import Hint from '../Hint';
+import { times } from '../../utils';
 const generateHint = ({ i, name, rowId, state }) => {
   const hints = [];
   let idVal;

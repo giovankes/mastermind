@@ -2,9 +2,10 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 const Rules = ({ rules, toggleRules }) => {
+  console.log(rules);
   const className = classNames({
     info: true,
-    hidden: rules,
+    hidden: !rules,
   });
 
   const infoText = !rules ? 'Show rules' : 'Hide rules';

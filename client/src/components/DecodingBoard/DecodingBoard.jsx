@@ -1,17 +1,10 @@
 import Row from '../Row';
+import { times } from '../../utils';
 
-const generateRow = ({
-  i,
-  type,
-  chosenCode,
-  state,
-  activatePeg,
-  submitPegs,
-}) => {
+const generateRow = ({ i, chosenCode, state, activatePeg, submitPegs }) => {
   let rows = [];
   let rowName;
-  let type = type;
-
+  console.log(state);
   rowName = 'decodeRow- ' + i + 1;
   rows.push(
     <Row
@@ -25,6 +18,7 @@ const generateRow = ({
       submitPegs={submitPegs}
     />
   );
+  return rows;
 };
 
 const DecodingBoard = ({ chosenCode, state, activatePeg, submitPegs }) => {
